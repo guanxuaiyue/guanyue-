@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<input type="text" id="user">
+<input type="text" id="pass">
+<button id="btn">注册</button>
+<button id="btn1">登录</button>
+<script src="zhoukao.js"></script>
+<script>
+    btn.onclick=function () {
+        ajax({
+            type:'post',
+            url:'http://localhost:8000',
+            data:{
+                user:user.value,
+                pass:pass.value
+
+
+            } ,
+            success:function (data) {
+                console.log(data)
+            }
+
+        })
+
+    }
+
+    btn1.onclick=function () {
+        ajax({
+            type:'post',
+            url:'http://localhost:8002',
+            data:{
+                user:user.value,
+                pass:pass.value
+
+
+            } ,
+            success:function (data) {
+            if (data=='登陆成功'){
+                window.location.href="wenzhang.html"
+
+
+            }
+            }
+
+        })
+
+    }
+
+
+
+    function ajax (option){
+        var xhr = new XMLHttpRequest();
+        var arr= []
+        for(var i in option.data){
+            arr.push(i+'='+option.data[i])
+        }
+        var str = '';
+        str=arr.join('&')
+        if(option.type == 'get'){
+            xhr.open('get',option.url+'?'+str,true);
+            xhr.send();
+        } else if(option.type == 'post'){
+            xhr.open('post',option.url,true);
+            xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            xhr.send(str);
+        }
+
+        xhr.onreadystatechange = function (){
+            if(xhr.readyState == 4){
+                if(xhr.status >=200 && xhr.status < 300 || xhr.status == 304){
+                    option.success(xhr.responseText)
+                    //console.log(xhr.responseText)
+                }else{
+                    console.log('服务器错误')
+                }
+
+
+            }
+        }
+    }
+
+
+
+    
+</script>
+</body>
+</html>
