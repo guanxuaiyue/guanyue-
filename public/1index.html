@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="box">
+
+用户名：<input type="text" id="user"><br>
+密码： <input type="text" id="pass"> <br>
+<button id="btn">登录</button>
+<button id="zc">注册</button>
+<input type="checkbox" id="mdl">免登陆
+</div>
+<p id="p"></p>
+<script>
+    zc.onclick=function () {
+        ajax({
+            url:'http://localhost:8004/resign/login',
+            type:'post',
+            data:{
+                user:user.value,
+                pass:pass.value
+            } ,
+            success:function (data) {
+                console.log(data)
+            } ,
+            error:function(){}
+
+        })
+
+    }
+   btn.onclick=function(){
+if(mdl.checked){
+
+ajax({
+type:"post",
+url:'http://localhost:8004/zidong',
+ data:{
+                user:user.value,
+                pass:pass.value,
+            } ,
+            success:function (data) {
+                console.log(data)
+            } ,
+            error:function(){}
+
+})
+}else{
+    ajax({
+            url:'http://localhost:8004/login',
+            type:'post',
+            data:{
+                user:user.value,
+                pass:pass.value,
+            } ,
+            success:function (data) {
+                console.log(data)
+            } ,
+            error:function(){}
+
+        })
+
+    }
+}
+
+
+ajax({
+url:'http://localhost:8004/automatic',
+type:'post',
+data:{
+user:'',
+pass:''
+},
+success:function(data){
+    console.log(data)
+    if(data == '登陆成功'){
+         box.style.display = 'none';
+         p.innerHTML = '欢迎您'
+        }else{
+         alert(data)
+                    }
+
+  }
+
+
+
+})
+ 
+
+
+
+
+
+
+
+
+
+
+
+    function ajax (option){
+        var xhr = new XMLHttpRequest();
+        var arr= []
+        for(var i in option.data){
+            arr.push(i+'='+option.data[i])
+        }
+        var str = '';
+        str=arr.join('&')
+        if(option.type == 'get'){
+            xhr.open('get',option.url+'?'+str,true);
+            xhr.send();
+        } else
+        if(option.type == 'post'){
+            xhr.open('post',option.url,true);
+            xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            xhr.send(str);
+        }
+        xhr.onreadystatechange = function (){
+            if(xhr.readyState == 4){
+                if(xhr.status >=200 && xhr.status < 300 || xhr.status == 304){
+                    option.success(xhr.responseText)
+                    //console.log(xhr.responseText)
+                }else{
+                    console.log('服务器错误')
+                }
+
+
+            }
+        }
+    }
+
+
+
+
+
+
+</script>
+</body>
+</html>
