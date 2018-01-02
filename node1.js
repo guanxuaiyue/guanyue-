@@ -16,12 +16,12 @@ app.use('/resign',function(req,res){
    
     fs.readFile('./data.txt','utf8',function(err,data){
         if(err) throw err;
-        let date = JSON.parse(data) // object
+        let date = JSON.parse(data) 
         let json = req.body;
         if(date[json.user]){
             res.send('您的账号已被注册');
         }else{
-            //{xiebin:123456}
+         
             date[json.user] = json.pass;
             fs.writeFile('./data.txt',JSON.stringify(date),function(err){
                 if(err) throw err;
