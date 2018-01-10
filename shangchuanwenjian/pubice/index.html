@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+img{width: 300px;height: 200px;}
+
+li{list-style: none;}
+.box{display: none}
+	</style>
+
+</head>
+<body>
+	<div class="mess"></div>
+	<input type="file" id="fil">
+	<button id="btn">提交</button>
+	<img src="" alt="">
+<div id="div"></div>
+<div class="box">
+ 	<input type="text" id="user"><br />
+ 	<input type="text" id="pass"><br />
+ 	<button id="btn1">提交</button>
+ 	</div> 
+
+
+
+
+	<script type="text/javascript" src="jquery.min.js"></script>
+	<script>
+list()
+function list(){
+	$.ajax({
+		url:'http://localhost:8000/user/list',
+		type:'GET',
+		success:function(c){
+			console.log(c)
+			var str = '';
+			for(var i = 0; i < c.length;i++){
+				str+=`<ul><li>${c[i].id}</li><li><img src="${c[i].img}" alt="" /></li>
+<li><button onclick="del(${c[i].id},$(this))">删除</button></li>
+<li><button onclick="update(${c[i].id})">+</button></li>
+</ul>`
+ 
+			}
+			$('.mess').html(str)
+		}
+	})
+	}
+
+
+
+
+btn.onclick=function(){
+var file=fil.files[0]
+var form=new FormData();
+console.log(form)
+form.append("files",file)
+
+var xhr=new XMLHttpRequest();
+xhr.open('post','http://localhost:8000/user/file',true);
+xhr.send(form); 
+xhr.onload = function(e){
+var a=xhr.responseText
+
+var c=JSON.parse(a)
+var str=""
+for(var i = 0; i < c.length;i++){console.log(a)
+
+str+=`<ul><li>${c[i].id}</li><li><img src="${c[i].img}" alt="" /></li>
+<li><button onclick="del(${c[i].id},$(this))">删除</button></li>
+<li><button onclick="update(${c[i].id})">+</button></li>
+</ul>`
+
+}
+div.innerHTML=str	
+			
+}
+
+
+}
+
+function del(el,a){
+			var id = el
+				$.ajax({
+				url:'http://localhost:8000/user/delete',
+				type:'POST',
+				data:{
+					id:id
+				},
+				success:function(e){
+					console.log(e)
+					if(e){
+						a.parent().parent().remove()  
+					}
+				}
+			})
+		}
+
+
+	/*var id;
+	function update(el){
+		$('.box').css('display','block');
+		id = el
+		$.ajax({
+		url:'http://localhost:8000/user/delete',
+		type:'POST',
+		data:{
+			id:id
+		},
+		success:function(e){
+			console.log(e)
+			$('#user').val(e[0].user);
+			$('#pass').val(e[0].pass)
+		}
+	})
+	}
+	
+	$('#btn1').click(function(){
+		$('.box').css('display','none');
+		$.ajax({
+			url:'http://localhost:8000/user/update',
+			type:'POST',
+			data:{
+	 			user:$('#user').val(),
+				pass:$('#pass').val(),
+				id:id
+			},
+			success:function(e){
+				console.log(e)
+				if(e){
+					list()
+				}
+			}
+		})
+	})
+*/
+	</script>
+</body>
+</html>
